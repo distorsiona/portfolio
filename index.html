@@ -44,20 +44,6 @@
       -webkit-user-select: none;
       font-family: 'Roboto Mono', monospace;
     }
-    .focus-statement {
-      display: grid;
-      grid-template-columns: max-content minmax(0, 1fr);
-      align-items: baseline;
-      column-gap: 0.8em;
-      margin: 0;
-      line-height: 1.65;
-      text-align: left;
-    }
-    .focus-statement strong { font-weight: 700; }
-    .focus-statement .focus-copy { min-width: 0; text-wrap: pretty; }
-    @media (max-width: 639px) {
-      .focus-statement { grid-template-columns: minmax(0, 1fr); row-gap: 0.4em; }
-    }
     .language-picker { position: relative; }
     #language-toggle { display: flex; align-items: center; gap: 4px; cursor: pointer; }
     .language-current { font: 600 10px 'Roboto Mono', monospace; }
@@ -323,7 +309,7 @@
 
         <!-- Card 2: F1Bre -->
         <a
-          href="https://github.com/distorsiona/f1bre"
+          href="https://distorsiona.github.io/f1bre/f1bre/frontend/"
           target="_blank"
           rel="noopener noreferrer"
           class="group block bg-[#181818] border-[4px] border-[#52C455] p-6 sm:p-8 lg:p-10 text-neutral-100 hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250 flex flex-col justify-between min-h-[340px] lg:min-h-[430px]"
@@ -381,9 +367,9 @@
 
       <!-- Focus Statement -->
       <div class="mt-10 lg:mt-14 max-w-6xl mx-auto text-sm sm:text-base lg:text-xl xl:text-2xl text-[#181818] leading-relaxed font-['Roboto_Mono']">
-        <p class="focus-statement">
-          <strong data-i18n="focusLabel">focus:</strong>
-          <span class="focus-copy"><span data-i18n="text16">Designing for the user first:</span> <span data-i18n="text17">transforming genuine needs into efficient, well-crafted, and enduring digital solutions.</span></span>
+        <p>
+          <span data-i18n="text16">&gt; focus: &quot;Building functional solutions where understanding the user comes first—</span><br class="hidden lg:inline" />
+          <span class="lg:pl-10"><span data-i18n="text17">identifying real needs and addressing them efficiently and thoughtfully.&quot;</span></span>
         </p>
       </div>
 
@@ -612,12 +598,12 @@
     "es": ">PROYECTOS:"
   },
   "text16": {
-    "en": "Designing for the user first:",
-    "es": "Diseñar pensando primero en el usuario:"
+    "en": "> focus: \"Building functional solutions where understanding the user comes first",
+    "es": "> enfoque: \"Crear soluciones funcionales poniendo en primer lugar la comprensión del usuario:"
   },
   "text17": {
-    "en": "transforming genuine needs into efficient, well-crafted, and enduring digital solutions.",
-    "es": "transformar necesidades reales en soluciones digitales eficientes, bien elaboradas y duraderas."
+    "en": "identifying real needs and addressing them efficiently and thoughtfully.\"",
+    "es": "identificar necesidades reales y abordarlas de manera eficiente y consciente.\""
   },
   "text18": {
     "en": "About me",
@@ -722,10 +708,6 @@
   "text43": {
     "en": "Astracool Logo",
     "es": "Logotipo de Astracool"
-  },
-  "focusLabel": {
-    "en": "focus:",
-    "es": "enfoque:"
   }
 };
   const toggle = document.getElementById('language-toggle');
