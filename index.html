@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rosario Bregante — RBBR | UX Engineer & Full-Stack Developer</title>
+
+  <!-- Google Fonts: Jaini Purva & Roboto Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Roboto+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['"Roboto Mono"', 'monospace'],
+            logo: ['"Jaini Purva"', 'system-ui'],
+          },
+          colors: {
+            'rb-dark': '#181818',
+            'rb-green': '#52C455',
+            'rb-green-dim': '#3A963E',
+            'rb-green-deep': '#1A822B',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Roboto Mono', monospace;
+      background-color: #181818;
+      color: #F2F2F2;
+    }
+
+    .ascii-art {
+      white-space: pre;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .focus-statement {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      align-items: baseline;
+      column-gap: 0.8em;
+      margin: 0;
+      line-height: 1.65;
+      text-align: left;
+    }
+    .focus-statement strong { font-weight: 700; }
+    .focus-statement .focus-copy { min-width: 0; text-wrap: pretty; }
+    @media (max-width: 639px) {
+      .focus-statement { grid-template-columns: minmax(0, 1fr); row-gap: 0.4em; }
+    }
+    .language-picker { position: relative; }
+    #language-toggle { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+    .language-current { font: 600 10px 'Roboto Mono', monospace; }
+    .language-options { position: absolute; right: 0; top: calc(100% + 8px); min-width: 180px; padding: 6px; border: 1px solid #52C455; border-radius: 4px; background: #181818; box-shadow: 0 8px 24px #0008; z-index: 60; }
+    .language-options[hidden] { display: none; }
+    .language-options button { display: flex; justify-content: space-between; width: 100%; padding: 10px 12px; color: #f2f2f2; font: inherit; cursor: pointer; text-align: left; }
+    .language-options button:hover, .language-options button[aria-pressed="true"] { background: #272727; color: #52C455; }
+    .language-options button:focus-visible, #language-toggle:focus-visible { outline: 2px solid #52C455; outline-offset: 2px; }
+    html[lang="es"] header nav { gap: clamp(1rem, 3vw, 4rem); }
+  </style>
+</head>
+<body class="font-['Roboto_Mono'] antialiased selection:bg-[#52C455] selection:text-[#181818] overflow-x-hidden">
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header class="sticky top-0 z-50 w-full bg-[#181818]/95 backdrop-blur-sm border-t-[3px] border-b border-[#52C455]/80">
+    <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 h-20 lg:h-24 flex items-center justify-between">
+      <!-- Logo RBBR -->
+      <div class="flex items-center h-full pr-6 sm:pr-12 lg:pr-16 border-r border-[#52C455]/70">
+        <a href="#" class="flex items-center text-[#52C455] text-5xl sm:text-6xl lg:text-7xl font-['Jaini_Purva'] tracking-wider leading-none select-none hover:opacity-90 transition-all duration-250" aria-label="RBBR Home" data-i18n-aria-label="text38">
+          <span>RB</span>
+          <span class="mx-1.5 text-xl sm:text-2xl lg:text-3xl text-[#52C455]">◆</span>
+          <span class="inline-block -scale-x-100">RB</span>
+        </a>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-10 lg:gap-20 xl:gap-28 text-base lg:text-xl xl:text-2xl font-['Roboto_Mono'] text-neutral-200">
+        <a href="#projects" class="hover:text-[#52C455] transition-all duration-250"><span data-i18n="text0">projects</span></a>
+        <a href="#about" class="hover:text-[#52C455] transition-all duration-250"><span data-i18n="text1">about</span></a>
+        <a href="#skills" class="hover:text-[#52C455] transition-all duration-250"><span data-i18n="text2">skills</span></a>
+        <a href="#contact" class="hover:text-[#52C455] transition-all duration-250"><span data-i18n="text3">contact</span></a>
+      </nav>
+
+      <!-- Utility Icons (Globe & Audio/Headset) -->
+      <div class="flex items-center gap-4 sm:gap-6 text-[#52C455]">
+        <div class="language-picker">
+          <button id="language-toggle" type="button" aria-label="Choose language" title="Choose language" aria-expanded="false" aria-controls="language-options" class="p-2 rounded border border-transparent hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250">
+<svg class="w-7 h-7 lg:w-9 lg:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3.6 9h16.8M3.6 15h16.8" />
+            <path d="M12 3a14.5 14.5 0 0 0 0 18 14.5 14.5 0 0 0 0-18z" />
+          </svg><span id="language-current" class="language-current" aria-hidden="true">EN</span>
+          </button>
+          <div id="language-options" class="language-options" hidden role="group" aria-label="Language">
+            <button type="button" data-language="en" lang="en" aria-pressed="true">English <span aria-hidden="true">EN</span></button>
+            <button type="button" data-language="es" lang="es" aria-pressed="false">Español <span aria-hidden="true">ES</span></button>
+          </div>
+        </div>
+        <a
+          href="#contact"
+          title="Contact / Audio Status" data-i18n-title="text39"
+          class="p-2 rounded border border-transparent hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250"
+        >
+          <svg class="w-7 h-7 lg:w-9 lg:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 13v-1a8 8 0 0 1 16 0v1" />
+            <rect x="3" y="12" width="3.5" height="6" rx="1.5" />
+            <rect x="17.5" y="12" width="3.5" height="6" rx="1.5" />
+            <path d="M19 18v1a2 2 0 0 1-2 2h-4" />
+            <circle cx="12" cy="21" r="1" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section class="w-full min-h-[calc(100dvh-5rem)] lg:min-h-[calc(100dvh-6rem)] bg-[#181818] flex items-stretch justify-center overflow-hidden">
+    <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 flex items-stretch">
+      <div class="w-full grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-6">
+
+        <!-- Left Column: Composite ASCII Art (Mirror + Subject Overlay) -->
+        <div class="lg:col-span-5 h-full flex items-end justify-center overflow-hidden pt-2">
+          <!-- Proportional ASCII Stage: scales both layers together in em units -->
+          <div class="relative inline-grid place-items-center text-[7.5px] sm:text-[9.5px] md:text-[11px] lg:text-[10.5px] xl:text-[12px] 2xl:text-[13.5px] leading-none">
+            <!-- Layer 1 (Background): Asset A - El Espejo (Elongated Oval) -->
+            <pre class="col-start-1 row-start-1 m-0 flex items-end justify-center"><code class="ascii-art font-['Roboto_Mono'] text-[1em] leading-[1.15] scale-x-[0.9] origin-bottom text-[#52C455] opacity-95">                                     -#=.:                                      
+                                  .:#:=-*+*.=.                                  
+                                  .:==+-:*+*=-                                  
+                             +.==:++%.-=*=-%%%=.:=.                             
+                         =+.* %+:=:+#=%*-*=#*:%=#= =-+:                         
+                      ..#%-.-:-+#=#*-%+#-**=##=*===:=*%%:.                      
+                    :-#==#%%%+-:*+=-##+%+*%*-+*#:*-##%%#*+#:                    
+                    +#-+-%%%#=+*******#+:++****###+#%%%+#=#-                    
+                  ::+-+=#*#*==-.::+=:=**++:=+-.:=+**#+%#+*+=*=                  
+              ---+=+==.:===:.+:#+=*#+:-=-:-##+=-==.:++*%:#**:=*-*=              
+           :-=+. :++..*-- =:.+*:=              **#=*-.:+*#:=+%==. .==           
+          .-.*=*#:=:*=- +*=*-                     *=+-:..=+#-#*#*:+.:           
+         =::-::=#**=:.+=-++                          =#+:.:=*%#%#::+:--         
+        :=-*.:**==--:=.-=                              :+:: =+%:*%===.#.        
+        .+ .-=*-+::=+:+=                                 #=:.-=#.*#-.:::        
+         =.:-%==..+*-.                                    **+..=#.#=+:.         
+         ##*+++:.+#:.                                      =+*..=%=:*--         
+          #-*=-:-=-.                                        =+-.:+#=%*.         
+       :=:+--::.-==                                          #=. =***:#.:       
+       *+-***..*=::                                           *:- =#-*+.-       
+       %%%*-...:=.                                            +--.-+#**#=       
+      #-+*#= :**..                                            :*-:.=#:#%.=      
+      %===+= .+=-                                              #+. -*+-=+#=     
+      ++=*=..::..                                              -=- =++=+.=-     
+      :-*:=-.:::.                                              -=*.-*%+=:.      
+     =%%**=:=-=.:                                              ++*.*++#*=*+.    
+     -*+==.-*==..                                              *=+.#==#::.-     
+      -#+#-+.::..                                              ++#.:###+.=      
+      **-#....:+.                                              -*=.:=##+ -:     
+      *-==-: .=:-                                              *+: :=+:-.#=     
+      **%%#= .#+:                                              #.- :*:**++      
+       *+**+..:+..                                            *-+..:*.:%-       
+       *#::+...+--                                            #*. -=+#=:*:      
+       =**%:+ :-=-.                                          *+=..:%:*+:..      
+         --:+-..*-.                                          #-: :=-%*=         
+         *-.*:...-*-                                        *+=.:-#*-*.         
+          ==:%+.:::=-                                      -=#.::*:-:+=         
+           .-#*+..::+-                                    ==#..-#.#+#:-         
+        +%:.*:***...--::                                 **+.-=#:*=*-:-=        
+         +*.::=##=:. +*:.                              **+-.=+*:#-=+:+--        
+          .#:=: .#:-  ::-:-                           *=+::=+#+*=*#+:-          
+           :#+*:+...+.. +.---                      -#+*=:=-**##:#:#=-.          
+              *#.+##-.-. .==+=*+                :*==:-:--*--=*+==+.             
+               *-=*-#.:*+:..:+=#:-*-+=    =-+#+-*-=:.:-*--+**+*=+-              
+                    *+*.#%:+---.:=*+--###%+-+*-::==-*+**%-*- .                  
+                    +=-%:=-*#-*+++++===%*==+++++*#-#%**#%:=.                    
+                     :#*+%#%%=:###+**:=*:*#*=**#=**+%%%#-=*=                    
+                        ##+--*-#*=%##*#+:+%-+%-+%+.-+:%%=                       
+                           .  +##:*##**%%-:-*+#*#.. ..                          
+                              ..=*#+*...*==*%+-:::                              
+                                  =-#.:-*-:.#*                                  
+                                       =..                                      </code></pre>
+
+            <!-- Layer 2 (Foreground): Asset B - La Foto (Sujeto delante del espejo) -->
+            <pre class="col-start-1 row-start-1 m-0 self-end z-10 flex items-end justify-center translate-x-[5%]"><code class="ascii-art font-['Roboto_Mono'] text-[1.6em] leading-[1.5] scale-x-[0.9] origin-bottom text-neutral-100 font-semibold drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">                                    
+                                .. -.                                       
+                              -+*#*****#:                                    
+                          : +**+*--=+#**:                                   
+                          .**#*#++==++=####.                                 
+                          .###++**--*#++*#*                                  
+                         .*##+=--====-:.:+.=                                 
+                          *.#=-=---=-+=--##                                  
+                          *#*-===*+===--##                                  
+                          *##%===++==+%##*.                                 
+                          *.*##*+***+==###*                                 
+           --:.           *%#%#++++==*%%#=                                  
+           ==-:        .=*++**-+---=###**#*#+.                               
+           ===-    =+******+***+###**#******#+*++....  . .....               
+           -==-  .+*+*#++++++++*+*++*++++=.++#+***+.............              
+.          =+--:=*+*#*+*+++++:   +  ++ ---=.+-****++............             
+ .       ....=::  ++*#***---+-- := -=::=+:=: .=+++*%#**+..........              
+.      ::::......:+***###.-=*=--+ +:+=*:--- +++===**#***+...........             
+.      ::::....:+***###.-=*=--+ +:+=*:--- +++===**#*******+.......................</code></pre>
+          </div>
+        </div>
+
+        <!-- Right Column: Identity, Titles & System Profile -->
+        <div class="lg:col-span-7 flex flex-col justify-between space-y-10 lg:space-y-16 xl:space-y-20 py-6 lg:py-10 lg:pl-6">
+          <!-- Name and Role Tags -->
+          <div class="space-y-6 lg:space-y-10">
+            <div class="flex flex-wrap items-baseline justify-between gap-4">
+              <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-[5.25rem] xl:text-[6.5rem] 2xl:text-[7.5rem] font-bold tracking-tight text-[#52C455] leading-none">
+                ROSARIO
+              </h1>
+              <span class="text-lg sm:text-2xl xl:text-3xl font-semibold text-[#3A963E]">
+                <span data-i18n="text4">&lt;UX Engineer&gt;</span>
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-end justify-between gap-4">
+              <span class="text-lg sm:text-2xl xl:text-3xl font-semibold text-[#3A963E] leading-snug order-2 sm:order-1">
+                <span data-i18n="text5">&lt;Full-stack</span><br class="hidden sm:inline" />
+                <span class="sm:pl-4"><span data-i18n="text6">Developer&gt;</span></span>
+              </span>
+              <span class="text-5xl sm:text-7xl md:text-8xl lg:text-[5.25rem] xl:text-[6.5rem] 2xl:text-[7.5rem] font-bold tracking-tight text-[#52C455] leading-none order-1 sm:order-2 ml-auto">
+                BREGANTE
+              </span>
+            </div>
+          </div>
+
+          <!-- [SYSTEM PROFILE] Terminal Box -->
+          <div class="pt-4 flex justify-start lg:justify-end">
+            <div class="relative w-full max-w-xl xl:max-w-2xl text-xs sm:text-base lg:text-lg xl:text-xl text-neutral-200 font-['Roboto_Mono']">
+              <!-- Top ASCII-style Frame Line -->
+              <div class="flex items-center text-neutral-400">
+                <span>┌──</span>
+                <span class="px-2 text-neutral-200 tracking-wide"><span data-i18n="text7">[SYSTEM PROFILE]</span></span>
+                <span class="flex-1 border-t border-neutral-400"></span>
+                <span>┐</span>
+              </div>
+              <div class="px-6 sm:px-8 py-3 space-y-1.5 text-neutral-200">
+                <div class="grid grid-cols-[100px_1fr] sm:grid-cols-[130px_1fr]">
+                  <span class="text-neutral-300"><span data-i18n="text8">EXP</span></span>
+                  <span><span data-i18n="text9">: 02+ Years in Software</span></span>
+                </div>
+                <div class="grid grid-cols-[100px_1fr] sm:grid-cols-[130px_1fr]">
+                  <span class="text-neutral-300"><span data-i18n="text10">ROLE</span></span>
+                  <span><span data-i18n="text11">: Full Stack (Web &amp; Systems)</span></span>
+                </div>
+                <div class="grid grid-cols-[100px_1fr] sm:grid-cols-[130px_1fr]">
+                  <span class="text-neutral-300"><span data-i18n="text12">LOCATION</span></span>
+                  <span><span data-i18n="text13">: Santiago, CL (Remote)</span></span>
+                </div>
+              </div>
+              <!-- Bottom ASCII-style Frame Line -->
+              <div class="flex items-center text-neutral-400">
+                <span>└</span>
+                <span class="flex-1 border-b border-neutral-400"></span>
+                <span>┘</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS SECTION ================= -->
+  <section id="projects" class="w-full bg-white text-[#181818] relative pb-12 lg:pb-16">
+    <!-- Top Section Header Bar (Full Width with Flush Right Badge) -->
+    <div class="w-full flex flex-col md:flex-row md:items-start justify-between gap-4">
+      <!-- Terminal Command Prompt -->
+      <div class="px-4 sm:px-8 lg:px-14 xl:px-20 pt-6 lg:pt-8">
+        <p class="text-sm sm:text-base lg:text-xl xl:text-2xl text-[#52C455] font-['Roboto_Mono'] max-w-4xl leading-relaxed">
+          <span class="font-semibold">rosario@cyberio:~$</span> <span data-i18n="text14">building scalable systems, serving real needs, and delivering premium end-to-end solutions.</span>
+        </p>
+      </div>
+
+      <!-- >PROJECTS: Flush Right Badge -->
+      <div class="self-end md:self-start bg-[#1A822B] text-white font-semibold text-xl sm:text-2xl lg:text-4xl px-8 sm:px-12 lg:px-16 py-3 lg:py-4 tracking-wider shrink-0">
+        <span data-i18n="text15">&gt;PROJECTS:</span>
+      </div>
+    </div>
+
+    <!-- Main Projects Content Container -->
+    <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 mt-10 lg:mt-14">
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 xl:gap-12">
+
+        <!-- Card 1: VOCARE -->
+        <a
+          href="https://github.com/distorsiona/vocare"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group block bg-[#181818] border-[4px] border-[#52C455] p-6 sm:p-8 lg:p-10 text-neutral-100 hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250 flex flex-col justify-between min-h-[340px] lg:min-h-[430px]"
+        >
+          <!-- VOCARE Logo -->
+          <div class="h-24 lg:h-32 flex items-center justify-center group-hover:scale-105 transition-all duration-250">
+            <img
+              src="./vocare verde.png"
+              alt="VOCARE Logo" data-i18n-alt="text41"
+              class="max-h-20 lg:max-h-28 w-auto object-contain"
+            />
+          </div>
+
+          <!-- JSON Payload -->
+          <pre class="text-xs sm:text-sm lg:text-base xl:text-lg font-['Roboto_Mono'] leading-relaxed text-neutral-200 overflow-x-auto"><code data-i18n="text35">{
+  "project": "VOCARE",
+  "features": [
+    "patient_monitoring",
+    "emergency_dispatch",
+    "caregiver_wellbeing"
+  ],
+  "status": "MVP"
+}</code></pre>
+        </a>
+
+        <!-- Card 2: F1Bre -->
+        <a
+          href="https://github.com/distorsiona/f1bre"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group block bg-[#181818] border-[4px] border-[#52C455] p-6 sm:p-8 lg:p-10 text-neutral-100 hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250 flex flex-col justify-between min-h-[340px] lg:min-h-[430px]"
+        >
+          <!-- F1BRE Logo -->
+          <div class="h-24 lg:h-32 flex items-center justify-center group-hover:scale-105 transition-all duration-250">
+            <img
+              src="./fbreverde.png"
+              alt="F1Bre Logo" data-i18n-alt="text42"
+              class="max-h-16 lg:max-h-24 w-full object-contain px-2"
+            />
+          </div>
+
+          <!-- JSON Payload -->
+          <pre class="text-xs sm:text-sm lg:text-base xl:text-lg font-['Roboto_Mono'] leading-relaxed text-neutral-200 overflow-x-auto"><code data-i18n="text36">{
+  "project": "F1Bre",
+  "features": [
+    "telemetry_analytics",
+    "strategy_engine",
+    "data_pipeline"
+  ],
+  "status": "In active development"
+}</code></pre>
+        </a>
+
+        <!-- Card 3: Astracool -->
+        <a
+          href="https://github.com/distorsiona/astracool"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group block bg-[#181818] border-[4px] border-[#52C455] p-6 sm:p-8 lg:p-10 text-neutral-100 hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250 flex flex-col justify-between min-h-[340px] lg:min-h-[430px]"
+        >
+          <!-- Astracool Logo -->
+          <div class="h-24 lg:h-32 flex items-center justify-center group-hover:scale-105 transition-all duration-250">
+            <img
+              src="./astracool verde.png"
+              alt="Astracool Logo" data-i18n-alt="text43"
+              class="max-h-20 lg:max-h-28 w-auto object-contain"
+            />
+          </div>
+
+          <!-- JSON Payload -->
+          <pre class="text-xs sm:text-sm lg:text-base xl:text-lg font-['Roboto_Mono'] leading-relaxed text-neutral-200 overflow-x-auto"><code data-i18n="text37">{
+  "project": "Astracool",
+  "features": [
+    "natal_chart_engine",
+    "maternal_sign_sync",
+    "interactive_reports"
+  ],
+  "status": "In active development"
+}</code></pre>
+        </a>
+
+      </div>
+
+      <!-- Focus Statement -->
+      <div class="mt-10 lg:mt-14 max-w-6xl mx-auto text-sm sm:text-base lg:text-xl xl:text-2xl text-[#181818] leading-relaxed font-['Roboto_Mono']">
+        <p class="focus-statement">
+          <strong data-i18n="focusLabel">focus:</strong>
+          <span class="focus-copy"><span data-i18n="text16">Designing for the user first:</span> <span data-i18n="text17">transforming genuine needs into efficient, well-crafted, and enduring digital solutions.</span></span>
+        </p>
+      </div>
+
+      <!-- Scroll Down Action Button -->
+      <div class="mt-8 lg:mt-10 flex justify-center">
+        <a
+          href="#about"
+          aria-label="Scroll to About section" data-i18n-aria-label="text40"
+          class="w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-[#1A822B] text-[#52C455] flex items-center justify-center border border-transparent hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250 shadow-md"
+        >
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT & TECHNICAL SKILLS SECTION ================= -->
+  <section id="about" class="w-full bg-[#181818] text-neutral-100 relative overflow-hidden">
+    <!-- Decorative Top-Right Green Bar -->
+    <div class="hidden md:block absolute top-0 right-0 w-1/4 h-2.5 bg-[#1A822B]"></div>
+
+    <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 py-14 sm:py-20 lg:py-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+
+        <!-- Left Column: "About me" -->
+        <div class="lg:col-span-7 space-y-6 lg:space-y-8">
+          <h2 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none flex items-start gap-2 select-none">
+            <span class="text-[#52C455] text-6xl sm:text-7xl lg:text-8xl -mt-3">“</span>
+            <span class="text-[#1A822B]"><span data-i18n="text18">About me</span></span>
+            <span class="text-[#52C455] text-6xl sm:text-7xl lg:text-8xl -mt-3">”</span>
+          </h2>
+
+          <div class="space-y-5 text-sm sm:text-base lg:text-xl xl:text-2xl text-neutral-100 leading-relaxed font-['Roboto_Mono']">
+            <p>
+              <span data-i18n="text19">Based in Valparaíso, Chile, my work is profoundly shaped by the purpose, human scale, and conscious design of my surroundings.</span>
+            </p>
+            <p>
+              <span data-i18n="text20">My approach to engineering rests on three core principles:</span>
+            </p>
+
+            <ul class="list-disc pl-6 space-y-4 text-neutral-200">
+              <li>
+                <span class="font-semibold text-white"><span data-i18n="text21">Understand before writing code:</span></span>
+                <span data-i18n="text22">Understanding real human context and underlying needs before designing.</span>
+              </li>
+              <li>
+                <span class="font-semibold text-white"><span data-i18n="text23">Transform complexity into empathy:</span></span>
+                <span data-i18n="text24">Crafting intuitive, friendly, and reliable interfaces that make workflows feel natural.</span>
+              </li>
+              <li>
+                <span class="font-semibold text-white"><span data-i18n="text25">Balance technical rigor with visual harmony:</span></span>
+                <span data-i18n="text26">Pairing robust backend architectures and automated testing with thoughtful user-centered design.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right Column: Technical Skills & Stack Retro Window -->
+        <div id="skills" class="lg:col-span-5 lg:mt-16">
+          <div class="rounded-lg border-2 border-[#52C455] bg-[#181818] shadow-xl overflow-hidden">
+            <!-- Window Titlebar -->
+            <div class="px-4 py-2 border-b border-[#52C455] flex items-center justify-end gap-2 bg-[#181818]">
+              <span class="w-4 h-4 border border-[#52C455] flex items-center justify-center text-[10px] leading-none text-[#52C455]">-</span>
+              <span class="w-4 h-4 border border-[#52C455] flex items-center justify-center text-[10px] leading-none text-[#52C455]">□</span>
+              <span class="w-4 h-4 border border-[#52C455] flex items-center justify-center text-[10px] leading-none text-[#52C455]">×</span>
+            </div>
+
+            <!-- Window Body -->
+            <div class="p-6 sm:p-8 lg:p-10 space-y-6 text-sm sm:text-base lg:text-xl xl:text-2xl leading-relaxed">
+              <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-snug">
+                <span data-i18n="text27">Technical Skills &amp;</span><br />
+                <span data-i18n="text28">Stack</span>
+              </h3>
+
+              <div>
+                <h4 class="font-bold text-[#52C455]"><span data-i18n="text29">Stack &amp; Architecture:</span></h4>
+                <p class="text-neutral-200 mt-1">
+                  <span data-i18n="text30">Python, Ruby on Rails, TypeScript, FastAPI, Java, PostgreSQL, REST APIs.</span>
+                </p>
+              </div>
+
+              <div>
+                <h4 class="font-bold text-[#52C455]"><span data-i18n="text31">Frontend, Cloud &amp; DevOps:</span></h4>
+                <p class="text-neutral-200 mt-1">
+                  Flutter, React Native, Tailwind CSS, Docker, Linux, TDD.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER / CONTACT SECTION ================= -->
+  <footer id="contact" class="w-full bg-[#1A822B] text-white relative overflow-hidden">
+    <div class="w-full px-4 sm:px-8 lg:px-14 xl:px-20 py-8 sm:py-12 relative">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 items-end text-sm sm:text-base lg:text-xl font-['Roboto_Mono']">
+
+        <!-- Left: Contact Links -->
+        <div class="space-y-1.5">
+          <p class="font-semibold tracking-wide mb-2"><span data-i18n="text32">contact</span></p>
+          <div>
+            <a
+              href="https://github.com/distorsiona"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-block border border-transparent px-1 -ml-1 rounded hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250"
+            >
+              github: distorsiona
+            </a>
+          </div>
+          <div>
+            <a
+              href="https://linkedin.com/in/rosario-bregante"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-block border border-transparent px-1 -ml-1 rounded hover:bg-neutral-800 hover:border-neutral-400 transition-all duration-250"
+            >
+              linkedin: Rosario Bregante
+            </a>
+          </div>
+        </div>
+
+        <!-- Center: Copyright -->
+        <div class="sm:text-center self-center">
+          <p class="tracking-wide">Rosario Bregante - RBBR©</p>
+        </div>
+
+        <!-- Right: Origin & Decorative ASCII Silhouette -->
+        <div class="flex items-end justify-between sm:justify-end gap-6">
+          <div class="text-left sm:text-right space-y-3">
+            <p><span data-i18n="text33">Made in Chile</span></p>
+            <p><span data-i18n="text34">since 2002</span></p>
+          </div>
+
+          <!-- Subtle ASCII Halftone Silhouette Accent -->
+          <pre class="hidden sm:block m-0 leading-[0.85] text-[5.5px] lg:text-[7px] text-white/75 select-none ascii-art"><code>      .:==:        .::.
+     .+#%%#=.     .=##+:
+     :*%%%%#=.   .=%%%%*:
+     .+%%%%%#+:..+#%%%%#=.
+      :%%%%%%%%%%%%%%%%#+:
+    ..=%%%%%%%%%%%%%%%%%%#=.
+   .=%%%%%%%%%%%%%%%%%%%%%#-
+   .*%%%%%%%%%%%%%%%%%%%%%%+.
+    :#%%%%%%%%%%%%%%%%%%%%%*:
+     :+%%%%%%%%%%%%%%%%%%%%#=.
+      .=%%%%%%%%%%%%%%%%%%%%+:
+       .+%%%%%%%%%%%%%%%%%%%*:
+       .:#%%%%%%%%%%%%%%%%%%%=</code></pre>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+
+<script>
+(() => {
+  const translations = {
+  "text0": {
+    "en": "projects",
+    "es": "proyectos"
+  },
+  "text1": {
+    "en": "about",
+    "es": "sobre mí"
+  },
+  "text2": {
+    "en": "skills",
+    "es": "habilidades"
+  },
+  "text3": {
+    "en": "contact",
+    "es": "contacto"
+  },
+  "text4": {
+    "en": "<UX Engineer>",
+    "es": "<Ingeniera UX>"
+  },
+  "text5": {
+    "en": "<Full-stack",
+    "es": "<Desarrolladora"
+  },
+  "text6": {
+    "en": "Developer>",
+    "es": "full-stack>"
+  },
+  "text7": {
+    "en": "[SYSTEM PROFILE]",
+    "es": "[PERFIL DEL SISTEMA]"
+  },
+  "text8": {
+    "en": "EXP",
+    "es": "EXP"
+  },
+  "text9": {
+    "en": ": 02+ Years in Software",
+    "es": ": Más de 2 años en software"
+  },
+  "text10": {
+    "en": "ROLE",
+    "es": "ROL"
+  },
+  "text11": {
+    "en": ": Full Stack (Web & Systems)",
+    "es": ": Full-stack (web y sistemas)"
+  },
+  "text12": {
+    "en": "LOCATION",
+    "es": "UBICACIÓN"
+  },
+  "text13": {
+    "en": ": Santiago, CL (Remote)",
+    "es": ": Santiago, CL (remoto)"
+  },
+  "text14": {
+    "en": "building scalable systems, serving real needs, and delivering premium end-to-end solutions.",
+    "es": "construyendo sistemas escalables, atendiendo necesidades reales y ofreciendo soluciones integrales de alta calidad."
+  },
+  "text15": {
+    "en": ">PROJECTS:",
+    "es": ">PROYECTOS:"
+  },
+  "text16": {
+    "en": "Designing for the user first:",
+    "es": "Diseñar pensando primero en el usuario:"
+  },
+  "text17": {
+    "en": "transforming genuine needs into efficient, well-crafted, and enduring digital solutions.",
+    "es": "transformar necesidades reales en soluciones digitales eficientes, bien elaboradas y duraderas."
+  },
+  "text18": {
+    "en": "About me",
+    "es": "Sobre mí"
+  },
+  "text19": {
+    "en": "Based in Chile, my work is profoundly shaped by the purpose, human scale, and conscious design of my surroundings.",
+    "es": "Desde Chile, mi trabajo está profundamente influido por el propósito, la escala humana y el diseño consciente de mi entorno."
+  },
+  "text20": {
+    "en": "My approach to engineering rests on three core principles:",
+    "es": "Mi enfoque de la ingeniería se basa en tres principios fundamentales:"
+  },
+  "text21": {
+    "en": "Understand before writing code:",
+    "es": "Comprender antes de escribir código:"
+  },
+  "text22": {
+    "en": "Understanding real human context and underlying needs before designing.",
+    "es": "Comprender el contexto humano real y las necesidades de fondo antes de diseñar."
+  },
+  "text23": {
+    "en": "Transform complexity into empathy:",
+    "es": "Transformar la complejidad en empatía:"
+  },
+  "text24": {
+    "en": "Crafting intuitive, friendly, and reliable interfaces that make workflows feel natural.",
+    "es": "Crear interfaces intuitivas, cercanas y confiables que hagan que los flujos de trabajo se sientan naturales."
+  },
+  "text25": {
+    "en": "Balance technical rigor with visual harmony:",
+    "es": "Equilibrar el rigor técnico con la armonía visual:"
+  },
+  "text26": {
+    "en": "Pairing robust backend architectures and automated testing with thoughtful user-centered design.",
+    "es": "Combinar arquitecturas de backend robustas y pruebas automatizadas con un diseño cuidadoso centrado en las personas."
+  },
+  "text27": {
+    "en": "Technical Skills &",
+    "es": "Habilidades técnicas y"
+  },
+  "text28": {
+    "en": "Stack",
+    "es": "tecnologías"
+  },
+  "text29": {
+    "en": "Stack & Architecture:",
+    "es": "Tecnologías y arquitectura:"
+  },
+  "text30": {
+    "en": "Python, Ruby on Rails, TypeScript, FastAPI, Java, PostgreSQL, REST APIs.",
+    "es": "Python, Ruby on Rails, TypeScript, FastAPI, Java, PostgreSQL, API REST."
+  },
+  "text31": {
+    "en": "Frontend, Cloud & DevOps:",
+    "es": "Frontend, nube y DevOps:"
+  },
+  "text32": {
+    "en": "contact",
+    "es": "contacto"
+  },
+  "text33": {
+    "en": "Made in Chile",
+    "es": "Hecho en Chile"
+  },
+  "text34": {
+    "en": "since 2002",
+    "es": "desde 2002"
+  },
+  "text35": {
+    "en": "{\n  \"project\": \"VOCARE\",\n  \"features\": [\n    \"patient_monitoring\",\n    \"emergency_dispatch\",\n    \"caregiver_wellbeing\"\n  ],\n  \"status\": \"MVP\"\n}",
+    "es": "{\n  \"proyecto\": \"VOCARE\",\n  \"funcionalidades\": [\n    \"monitoreo_de_pacientes\",\n    \"coordinacion_de_emergencias\",\n    \"bienestar_del_cuidador\"\n  ],\n  \"estado\": \"Producto mínimo viable\"\n}"
+  },
+  "text36": {
+    "en": "{\n  \"project\": \"F1Bre\",\n  \"features\": [\n    \"telemetry_analytics\",\n    \"strategy_engine\",\n    \"data_pipeline\"\n  ],\n  \"status\": \"In active development\"\n}",
+    "es": "{\n  \"proyecto\": \"F1Bre\",\n  \"funcionalidades\": [\n    \"analisis_de_telemetria\",\n    \"motor_de_estrategia\",\n    \"flujo_de_datos\"\n  ],\n  \"estado\": \"En desarrollo activo\"\n}"
+  },
+  "text37": {
+    "en": "{\n  \"project\": \"Astracool\",\n  \"features\": [\n    \"natal_chart_engine\",\n    \"maternal_sign_sync\",\n    \"interactive_reports\"\n  ],\n  \"status\": \"In active development\"\n}",
+    "es": "{\n  \"proyecto\": \"Astracool\",\n  \"funcionalidades\": [\n    \"motor_de_carta_natal\",\n    \"sincronizacion_del_signo_materno\",\n    \"informes_interactivos\"\n  ],\n  \"estado\": \"En desarrollo activo\"\n}"
+  },
+  "text38": {
+    "en": "RBBR Home",
+    "es": "Inicio de RBBR"
+  },
+  "text39": {
+    "en": "Contact / Audio Status",
+    "es": "Contacto"
+  },
+  "text40": {
+    "en": "Scroll to About section",
+    "es": "Ir a la sección Sobre mí"
+  },
+  "text41": {
+    "en": "VOCARE Logo",
+    "es": "Logotipo de VOCARE"
+  },
+  "text42": {
+    "en": "F1Bre Logo",
+    "es": "Logotipo de F1Bre"
+  },
+  "text43": {
+    "en": "Astracool Logo",
+    "es": "Logotipo de Astracool"
+  },
+  "focusLabel": {
+    "en": "focus:",
+    "es": "enfoque:"
+  }
+};
+  const toggle = document.getElementById('language-toggle');
+  const options = document.getElementById('language-options');
+  const picker = toggle.closest('.language-picker');
+  function closePicker(restoreFocus = false) {
+    options.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) toggle.focus();
+  }
+  function setLanguage(language) {
+    if (!['en', 'es'].includes(language)) return;
+    document.documentElement.lang = language;
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      element.textContent = translations[element.dataset.i18n][language];
+    });
+    ['title', 'aria-label', 'alt'].forEach(attribute => {
+      document.querySelectorAll('[data-i18n-' + attribute + ']').forEach(element => {
+        const key = element.getAttribute('data-i18n-' + attribute);
+        element.setAttribute(attribute, translations[key][language]);
+      });
+    });
+    const label = language === 'es' ? 'Elegir idioma' : 'Choose language';
+    toggle.setAttribute('aria-label', label);
+    toggle.title = label;
+    options.setAttribute('aria-label', language === 'es' ? 'Idioma' : 'Language');
+    document.getElementById('language-current').textContent = language.toUpperCase();
+    options.querySelectorAll('[data-language]').forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.language === language));
+    });
+    document.title = language === 'es'
+      ? 'Rosario Bregante — RBBR | Ingeniera UX y desarrolladora full-stack'
+      : 'Rosario Bregante — RBBR | UX Engineer & Full-Stack Developer';
+    try { localStorage.setItem('rbbr-language', language); } catch { /* Storage may be unavailable. */ }
+  }
+  toggle.addEventListener('click', () => {
+    const open = options.hidden;
+    options.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    if (open) options.querySelector('[aria-pressed="true"]').focus();
+  });
+  options.addEventListener('click', event => {
+    const button = event.target.closest('[data-language]');
+    if (!button) return;
+    setLanguage(button.dataset.language);
+    closePicker(true);
+  });
+  document.addEventListener('click', event => {
+    if (!picker.contains(event.target)) closePicker();
+  });
+  picker.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { event.preventDefault(); closePicker(true); }
+  });
+  picker.addEventListener('focusout', event => {
+    if (!picker.contains(event.relatedTarget)) closePicker();
+  });
+  let language = 'en';
+  try { language = localStorage.getItem('rbbr-language') || 'en'; } catch { /* Use English by default. */ }
+  setLanguage(['en', 'es'].includes(language) ? language : 'en');
+})();
+</script>
+
+</body>
+</html>
